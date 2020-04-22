@@ -7,7 +7,8 @@ describe("Gilded Rose", function() {
   let backstagePassesSellInFive
   let backstagePassesSellInTen
   let backstagePassesSellInTwenty
-  let randomItem 
+  let miscItem 
+  let miscItemQualityTwenty
 
   beforeEach(function() {
     agedBrie = new Item("Aged Brie", 10, 10);
@@ -16,7 +17,8 @@ describe("Gilded Rose", function() {
     backstagePassesSellInFive = new Item("Backstage passes to a TAFKAL80ETC concert", 5, 10)
     backstagePassesSellInTen = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 10)
     backstagePassesSellInTwenty = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 10)
-    randomItem = new Item("Random Item", 10, 10);
+    miscItem = new Item("misc Item", 10, 10);
+    miscItemQualityTwenty = new Item("misc Item", 0, 20)
   })
   
   describe("Aged Brie", function() {
@@ -80,9 +82,9 @@ describe("Gilded Rose", function() {
     })
   })
 
-  describe("Random items", function() {
+  describe("miscellaneous items", function() {
     it("should regularly decrease in quality and sellIn", function() {
-      const gildedRose = new Shop([randomItem])
+      const gildedRose = new Shop([miscItem])
       gildedRose.updateQuality()
       expect(gildedRose.items[0].quality).toEqual(9)
       expect(gildedRose.items[0].sellIn).toEqual(9)
@@ -99,6 +101,19 @@ describe("Gilded Rose", function() {
       expect(gildedRose.items[0].quality).not.toEqual(51)
       expect(gildedRose.items[0].quality).toEqual(50)
     })
+
+    it("cannot ever be negative", function() {
+      const gildedRose = new Shop([miscItem])
+      for(let i = 0; i <= 11; i++) { gildedRose.updateQuality() }
+      expect(gildedRose.items[0].quality).toEqual(0)
+    })
+
+    it("degrades twice as fast once sellIn date is less than 0", function() {
+      const gildedRose = new Shop([miscItemQualityTwenty])
+      for(let i = 0; i < 2; i++) { gildedRose.updateQuality() }
+      expect(gildedRose.items[0].quality).toEqual(16)
+      expect(gildedRose.items[0].sellIn).toEqual(-2)
+    })
   })
 
   describe("all items", function(){ 
@@ -109,7 +124,7 @@ describe("Gilded Rose", function() {
     });
 
     it("sellIn decreases by 1, besides handOfRagnaros", function() {
-      const gildedRose = new Shop([agedBrie, handofRagnaros, backstagePassesSellInTwenty, randomItem])
+      const gildedRose = new Shop([agedBrie, handofRagnaros, backstagePassesSellInTwenty, miscItem])
       const items = gildedRose.updateQuality()
       expect(items[0].name).toEqual("Aged Brie")
       expect(items[0].sellIn).toEqual(9)
@@ -117,11 +132,8 @@ describe("Gilded Rose", function() {
       expect(items[1].sellIn).toEqual(10)
       expect(items[2].name).toEqual("Backstage passes to a TAFKAL80ETC concert")
       expect(items[2].sellIn).toEqual(19)
-      expect(items[3].name).toEqual("Random Item")
+      expect(items[3].name).toEqual("misc Item")
       expect(items[3].sellIn).toEqual(9)
     })
   })
-
-  
-
 });
