@@ -136,4 +136,8 @@ describe("Gilded Rose", function() {
       expect(items[3].sellIn).toEqual(9)
     })
   })
+
+  describe("check item", function() {
+    
+  })
 });
