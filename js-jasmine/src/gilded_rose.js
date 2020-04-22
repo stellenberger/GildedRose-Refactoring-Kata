@@ -19,41 +19,10 @@ class Shop {
       let qualityRange = this.checkItemQualityRange(itemQuality)
       let modifiableItem = this.checkModifiableItems(item)
       if (qualityRange && modifiableItem) {
-        
-
-
-        if (item === "Miscellaneous item") {
-            this.decrementItemQuality(i)
-        } else {
-          if (item != 'Sulfuras, Hand of Ragnaros') {
-            this.incrementItemQuality(i)
-            if (item == 'Backstage passes to a TAFKAL80ETC concert') {
-              if (itemSellIn < 11) {
-                this.incrementItemQuality(i);
-              }
-              if (itemSellIn < 6) {
-                this.incrementItemQuality(i)
-              }
-            }
-          }
-        }
-        this.decrementItemSellIn(i)
-        
-        if (this.items[i].sellIn < 0) {
-          if (item != 'Aged Brie') {
-            if (item != 'Backstage passes to a TAFKAL80ETC concert') {
-              this.decrementItemQuality(i);
-            } else {
-              this.items[i].quality = this.items[i].quality - this.items[i].quality;
-            }
-          } else {
-            this.incrementItemQuality(i);
-          }
-        }
-        
+        this.updateItemAttributes(item, itemSellIn, i)
+        this.checkBackstagePassSellIn(item , i) 
       }
     }
-
     return this.items;
   }
 
@@ -107,6 +76,33 @@ class Shop {
     } else {
       return true
     }
+  }
+
+  updateItemAttributes(item, itemSellIn, i) {
+    if (item === "Miscellaneous item") {
+      this.decrementItemQuality(i)
+    } else {
+      this.incrementItemQuality(i)
+      if (item == 'Backstage passes to a TAFKAL80ETC concert') {
+        if (itemSellIn < 11) {
+          this.incrementItemQuality(i);
+        }
+        if (itemSellIn < 6) {
+          this.incrementItemQuality(i)
+        }
+      }
+    }
+    this.decrementItemSellIn(i)
+  }
+
+  checkBackstagePassSellIn(item, i) {
+    if (this.items[i].sellIn < 0) {
+      if (item != 'Backstage passes to a TAFKAL80ETC concert') {
+        this.decrementItemQuality(i);
+      } else {
+        this.items[i].quality = 0
+      }
+    }  
   }
 }
 
