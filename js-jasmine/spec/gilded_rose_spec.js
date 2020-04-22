@@ -2,17 +2,21 @@ var {Shop, Item} = require('../src/gilded_rose.js');
 describe("Gilded Rose", function() {
 
   let agedBrie 
+  let agedBrieQualityFifty
   let handofRagnaros 
-  let backstagePasses
+  let backstagePassesSellInFive
+  let backstagePassesSellInTen
+  let backstagePassesSellInTwenty
   let randomItem 
 
   beforeEach(function() {
     agedBrie = new Item("Aged Brie", 10, 10);
+    agedBrieQualityFifty = new Item("Aged Brie", 10, 50);
     handofRagnaros = new Item("Sulfuras, Hand of Ragnaros", 10, 10)
     backstagePassesSellInFive = new Item("Backstage passes to a TAFKAL80ETC concert", 5, 10)
     backstagePassesSellInTen = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 10)
     backstagePassesSellInTwenty = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 10)
-    randomItem = new Item("Random Item", 15, 20);
+    randomItem = new Item("Random Item", 10, 10);
   })
   
   describe("Aged Brie", function() {
@@ -43,7 +47,8 @@ describe("Gilded Rose", function() {
       gildedRose.updateQuality()
       expect(gildedRose.items[0].quality).toEqual(10)
       expect(gildedRose.items[0].sellIn).toEqual(10)
-      // the quality of Sulfuras should actually be 80, and should never alter.
+      // the quality of Sulfuras should actually be 80, and should never alter, according 
+      // to the actual documentation for this kata
     })
 
   })
@@ -75,6 +80,27 @@ describe("Gilded Rose", function() {
     })
   })
 
+  describe("Random items", function() {
+    it("should regularly decrease in quality and sellIn", function() {
+      const gildedRose = new Shop([randomItem])
+      gildedRose.updateQuality()
+      expect(gildedRose.items[0].quality).toEqual(9)
+      expect(gildedRose.items[0].sellIn).toEqual(9)
+      gildedRose.updateQuality()
+      expect(gildedRose.items[0].quality).toEqual(8)
+      expect(gildedRose.items[0].sellIn).toEqual(8)
+    })
+  })
+
+  describe("quality", function() {
+    it("should never be more than 50", function() {
+      const gildedRose = new Shop([agedBrieQualityFifty])
+      gildedRose.updateQuality()
+      expect(gildedRose.items[0].quality).not.toEqual(51)
+      expect(gildedRose.items[0].quality).toEqual(50)
+    })
+  })
+
   describe("all items", function(){ 
     it("should hold one item in the shop", function() {
       const gildedRose = new Shop([ new Item("item", 0, 0) ]);
@@ -92,7 +118,7 @@ describe("Gilded Rose", function() {
       expect(items[2].name).toEqual("Backstage passes to a TAFKAL80ETC concert")
       expect(items[2].sellIn).toEqual(19)
       expect(items[3].name).toEqual("Random Item")
-      expect(items[3].sellIn).toEqual(14)
+      expect(items[3].sellIn).toEqual(9)
     })
   })
 
