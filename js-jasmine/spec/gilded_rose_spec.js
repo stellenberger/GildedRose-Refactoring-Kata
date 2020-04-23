@@ -12,15 +12,15 @@ describe("Gilded Rose", function() {
   let conjuredItem
 
   beforeEach(function() {
-    agedBrie = new Item("Aged Brie", 10, 10);
-    agedBrieQualityFifty = new Item("Aged Brie", 10, 50);
-    handofRagnaros = new Item("Sulfuras, Hand of Ragnaros", 10, 10)
-    backstagePassesSellInFive = new Item("Backstage passes to a TAFKAL80ETC concert", 5, 10)
-    backstagePassesSellInTen = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 10)
-    backstagePassesSellInTwenty = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 10)
-    miscItem = new Item("misc Item", 10, 10);
-    miscItemQualityTwenty = new Item("misc Item", 0, 20)
-    conjuredItem = new Item("Conjured Item", 10, 10)
+    agedBrie = { name : "Aged Brie", sellIn : 10, quality : 10}
+    agedBrieQualityFifty = { name : "Aged Brie", sellIn : 10, quality : 50}
+    handofRagnaros = { name : "Sulfuras, Hand of Ragnaros", sellIn : 10, quality : 10}
+    backstagePassesSellInFive = { name : "Backstage passes to a TAFKAL80ETC concert", sellIn : 5, quality : 10}
+    backstagePassesSellInTen = { name : "Backstage passes to a TAFKAL80ETC concert", sellIn : 10, quality : 10}
+    backstagePassesSellInTwenty = { name : "Backstage passes to a TAFKAL80ETC concert", sellIn : 20, quality : 10}
+    miscItem = { name : "misc Item", sellIn : 10, quality : 10}
+    miscItemQualityTwenty = { name : "misc Item", sellIn : 0, quality : 20}
+    conjuredItem = { name : "Conjured Item", sellIn : 10, quality : 10}
   })
   
   describe("Aged Brie", function() {
