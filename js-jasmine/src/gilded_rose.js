@@ -20,7 +20,7 @@ class Shop {
       let modifiableItem = this.checkModifiableItems(item)
       if (qualityRange && modifiableItem) {
         this.updateItemAttributes(item, itemSellIn, i)
-        this.checkBackstagePassSellIn(item , i) 
+        this.checkSellInIsNegative(item , i) 
       }
     }
     return this.items;
@@ -43,27 +43,27 @@ class Shop {
   }
 
   checkStock(index) {
-    if (this.items[index].name === "Backstage passes to a TAFKAL80ETC concert") {
-      return true
-    } else if (this.items[index].name === "Sulfuras, Hand of Ragnaros") {
-      return true
-    } else if (this.items[index].name === "Aged Brie") {
+    let backstagePasses = this.items[index].name === "Backstage passes to a TAFKAL80ETC concert"
+    let sulfuras = this.items[index].name === "Sulfuras, Hand of Ragnaros"
+    let agedBrie = this.items[index].name === "Aged Brie"
+    let conjuredItem = this.items[index].name === "Conjured Item"
+    if (backstagePasses || sulfuras || agedBrie || conjuredItem) {
       return true
     } else {
       return false
     }
   }
 
-  decrementItemQuality(index) {
-    return this.items[index].quality = this.items[index].quality - 1;
+  decrementItemQuality(index, amount) {
+    return this.items[index].quality -= amount;
   }
 
-  incrementItemQuality(index) {
-    this.items[index].quality = this.items[index].quality + 1;
+  incrementItemQuality(index, amount) {
+    this.items[index].quality += amount;
   }
 
   decrementItemSellIn(index) {
-    this.items[index].sellIn = this.items[index].sellIn - 1;
+    this.items[index].sellIn -= 1;
   }
 
   checkItemQualityRange(itemQuality) {
@@ -80,25 +80,27 @@ class Shop {
 
   updateItemAttributes(item, itemSellIn, i) {
     if (item === "Miscellaneous item") {
-      this.decrementItemQuality(i)
+      this.decrementItemQuality(i, 1)
+    } else if (item === "Conjured Item") {
+      this.decrementItemQuality(i, 2)
     } else {
-      this.incrementItemQuality(i)
+      this.incrementItemQuality(i, 1)
       if (item == 'Backstage passes to a TAFKAL80ETC concert') {
         if (itemSellIn < 11) {
-          this.incrementItemQuality(i);
+          this.incrementItemQuality(i, 1);
         }
         if (itemSellIn < 6) {
-          this.incrementItemQuality(i)
+          this.incrementItemQuality(i, 1)
         }
       }
     }
     this.decrementItemSellIn(i)
   }
 
-  checkBackstagePassSellIn(item, i) {
+  checkSellInIsNegative(item, i) {
     if (this.items[i].sellIn < 0) {
       if (item != 'Backstage passes to a TAFKAL80ETC concert') {
-        this.decrementItemQuality(i);
+        this.decrementItemQuality(i, 1);
       } else {
         this.items[i].quality = 0
       }

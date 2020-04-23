@@ -9,6 +9,7 @@ describe("Gilded Rose", function() {
   let backstagePassesSellInTwenty
   let miscItem 
   let miscItemQualityTwenty
+  let conjuredItem
 
   beforeEach(function() {
     agedBrie = new Item("Aged Brie", 10, 10);
@@ -19,6 +20,7 @@ describe("Gilded Rose", function() {
     backstagePassesSellInTwenty = new Item("Backstage passes to a TAFKAL80ETC concert", 20, 10)
     miscItem = new Item("misc Item", 10, 10);
     miscItemQualityTwenty = new Item("misc Item", 0, 20)
+    conjuredItem = new Item("Conjured Item", 10, 10)
   })
   
   describe("Aged Brie", function() {
@@ -145,7 +147,13 @@ describe("Gilded Rose", function() {
     })
   })
 
-  describe("check item", function() {
-
+  describe("conjured", function() {
+    it("degrades twice as fast as normal items", function() {
+      const gildedRose = new Shop([conjuredItem])
+      const items = gildedRose.updateQuality()
+      expect(items[0].name).toEqual("Conjured Item")
+      expect(items[0].quality).toEqual(8)
+      expect(items[0].sellIn).toEqual(9)
+    })
   })
 });
